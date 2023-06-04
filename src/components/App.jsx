@@ -22,6 +22,21 @@ export const App = () => {
     console.log(state);
   }, [state]);
 
+    // Створюємо допоміжний метод для підрахунку загальної кількості зібраних відгуків з усіх категорій
+    const countTotalFeedback = (state) => {
+      // Сумуємо значення всіх категорій і повертаємо результат
+      return state.good + state.neutral + state.bad;
+    };
+  
+    // Створюємо допоміжний метод для підрахунку відсотка позитивних відгуків
+    const countPositiveFeedbackPercentage = (state) => {
+      // Отримуємо загальну кількість зібраних відгуків за допомогою попереднього методу
+      const total = countTotalFeedback(state);
+      // Якщо загальна кількість не дорівнює нулю, то ділимо кількість позитивних відгуків на загальну кількість і множимо на 100, щоб отримати відсоток
+      // Якщо загальна кількост дорiвнює нулю, то повертаємо нуль
+      return total !== 0 ? Math.round((state.good / total) * 100) : 0;
+    };
+
   return (
     <div className="App">
       <h1>Please leave feesback</h1>
@@ -33,6 +48,8 @@ export const App = () => {
       <p>Good: {state.good}</p>
       <p>Neutral: {state.neutral}</p>
       <p>Bad: {state.bad}</p>
+      <p>Total: {countTotalFeedback(state)}</p>
+      <p>Positive feedback: {countPositiveFeedbackPercentage(state)}%</p>
     </div>
   );
 }
