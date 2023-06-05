@@ -1,30 +1,24 @@
-// Імпортуємо бібліотеку prop-types
 import PropTypes from "prop-types";
 
-// Створюємо компонент <Statistics>, який приймає пропси good, neutral, bad, total і positivePercentage
+
 export const Statistics = ({ good, neutral, bad, total, positivePercentage }) => {
-    // Рендеримо статистику за допомогою тегів <p>
+    
     return (
       <>
-        <p>Good: {good}</p>
-        <p>Neutral: {neutral}</p>
-        <p>Bad: {bad}</p>
-        <p>Total: {total}</p>
-        <p>Positive feedback: {positivePercentage}%</p>
+        <p style={{ fontSize: "26px" }}>Good: {good}</p>
+        <p style={{ fontSize: "26px" }}>Neutral: {neutral}</p>
+        <p style={{ fontSize: "26px" }}>Bad: {bad}</p>
+        <p style={{ fontSize: "26px" }}>Total: {total}</p>
+        <p style={{ fontSize: "30px" }}>Positive feedback: {positivePercentage}%</p>
       </>
     );
   }
 
-  // Присвоюємо об'єкт propTypes до компоненту <Statistics> і вказуємо типи пропсів
-Statistics.propTypes = {
-    // Вказуємо, що пропс good має бути числом і є обов'язковим
-    good: PropTypes.number.isRequired,
-    // Вказуємо, що пропс neutral має бути числом і є обов'язковим
-    neutral: PropTypes.number.isRequired,
-    // Вказуємо, що пропс bad має бути числом і є обов'язковим
-    bad: PropTypes.number.isRequired,
-    // Вказуємо, що пропс total має бути числом і є обов'язковим
-    total: PropTypes.number.isRequired,
-    // Вказуємо, що пропс positivePercentage має бути числом і є обов'язковим
+
+Statistics.propTypes = {    
+    good: PropTypes.number.isRequired,   
+    neutral: PropTypes.number.isRequired,  
+    bad: PropTypes.number.isRequired,  
+    total: PropTypes.number.isRequired,  
     positivePercentage: PropTypes.number.isRequired
   };
