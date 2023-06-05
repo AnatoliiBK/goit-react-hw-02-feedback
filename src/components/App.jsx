@@ -6,17 +6,17 @@ import { Section } from "./section/Section";
 import { Notification } from "./notification/Notification";
 
 export class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      good: 0,
-      neutral: 0,
-      bad: 0,
-    };
-  }
+  state = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  };
 
   incrementFeedback = (category) => {
     this.setState((prevState) => ({
+      // good: prevState.good,
+      // neutral: prevState.neutral,
+      // bad: prevState.bad,
       ...prevState,
       [category]: prevState[category] + 1,
     }));
