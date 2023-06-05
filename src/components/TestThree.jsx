@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+// Імпортуємо бібліотеку prop-types
+import PropTypes from "prop-types";
 
 // Створюємо компонент <Statistics>, який приймає пропси good, neutral, bad, total і positivePercentage
-export const Statistics = ({ good, neutral, bad, total, positivePercentage }) => {
+function Statistics({ good, neutral, bad, total, positivePercentage }) {
   // Рендеримо статистику за допомогою тегів <p>
   return (
     <>
@@ -14,8 +16,22 @@ export const Statistics = ({ good, neutral, bad, total, positivePercentage }) =>
   );
 }
 
+// Присвоюємо об'єкт propTypes до компоненту <Statistics> і вказуємо типи пропсів
+Statistics.propTypes = {
+  // Вказуємо, що пропс good має бути числом і є обов'язковим
+  good: PropTypes.number.isRequired,
+  // Вказуємо, що пропс neutral має бути числом і є обов'язковим
+  neutral: PropTypes.number.isRequired,
+  // Вказуємо, що пропс bad має бути числом і є обов'язковим
+  bad: PropTypes.number.isRequired,
+  // Вказуємо, що пропс total має бути числом і є обов'язковим
+  total: PropTypes.number.isRequired,
+  // Вказуємо, що пропс positivePercentage має бути числом і є обов'язковим
+  positivePercentage: PropTypes.number.isRequired
+};
+
 // Створюємо компонент <FeedbackOptions>, який приймає пропси options і onLeaveFeedback
-export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
+function FeedbackOptions({ options, onLeaveFeedback }) {
   // Рендеримо кнопки за допомогою тегів <button>, які викликають функцію onLeaveFeedback з параметром категорії при кліку
   return (
     <>
@@ -28,18 +44,46 @@ export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
   );
 }
 
+// Присвоюємо об'єкт propTypes до компоненту <FeedbackOptions> і вказуємо типи пропсів
+FeedbackOptions.propTypes = {
+  // Вказуємо, що пропс options має бути масивом рядків і є обов'язковим
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // Вказуємо, що пропс onLeaveFeedback має бути функцією і є обов'язковим
+  onLeaveFeedback: PropTypes.func.isRequired
+};
+
 // Створюємо компонент <Section>, який приймає пропси title і children
-export const Section = ({ title, children }) => {
+function Section({ title, children }) {
   // Рендеримо секцію з заголовком і дітьми за допомогою тегів <section> і <h2>
   return (
     <section>
-      <h1>{title}</h1>
+      <h2>{title}</h2>
       {children}
     </section>
   );
 }
 
-export const App = () => {
+// Присвоюємо об'єкт propTypes до компоненту <Section> і вказуємо типи пропсів
+Section.propTypes = {
+  // Вказуємо, що пропс title має бути рядком і є обов'язковим
+  title: PropTypes.string.isRequired,
+  // Вказуємо, що пропс children має бути елементом React і є обов'язковим
+  children: PropTypes.element.isRequired
+};
+
+// Створюємо компонент <Notification>, який приймає пропс message
+function Notification({ message }) {
+  // Рендеримо повідомлення за допомогою тегу <p>
+  return <p>{message}</p>;
+}
+
+// Присвоюємо об'єкт propTypes до компоненту <Notification> і вказуємо типи пропсів
+Notification.propTypes = {
+  // Вказуємо, що пропс message має бути рядком і є обов'язковим
+  message: PropTypes.string.isRequired
+};
+
+function App() {
   // Створюємо стан застосунку з початковими значеннями
   const [state, setState] = useState({
     good: 0,
@@ -72,33 +116,43 @@ export const App = () => {
     // Отримуємо загальну кількість зібраних відгуків за допомогою попереднього методу
     const total = countTotalFeedback(state);
     // Якщо загальна кількість не дорівнює нулю, то ділимо кількість позитивних відгуків на загальну кількість і множимо на 100, щоб отримати відсоток
-    // Якщо загальна кількост дорiвнює нулю, то повертаємо нуль
+    // Якщо загальна кiлькост дорiвнює нулю, то повертаємо нуль
     return total !== 0 ? Math.round((state.good / total) * 100) : 0;
   };
 
   // Отримуємо масив ключів стану застосунку, які будуть використовуватися як опції для кнопок
   const options = Object.keys(state);
 
+  // Отримуємо загальну кількість зібраних відгуків за допомогою допоміжного методу
+  const total = countTotalFeedback(state);
+
   return (
     <div className="App">
       
       {/* Обгортаємо компонент <FeedbackOptions> у компонент <Section> з заголовком "Будь ласка, оцiнiть наш сервiс за наступними категорiями:" */}
-      <Section title="Statistics">
+      <Section title="Please leave feedback">
         {/* Передаємо компоненту <FeedbackOptions> опції і функцію для збільшення кількості відгуків */}
         <FeedbackOptions options={options} onLeaveFeedback={incrementFeedback} />
       </Section>
       {/* Обгортаємо компонент <Statistics> у компонент <Section> з заголовком "Результати" */}
-      <Section title="Total">
-        {/* Передаємо компоненту <Statistics> дані з стану застосунку і результати допоміжних методів */}
-        <Statistics
-          good={state.good}
-          neutral={state.neutral}
-          bad={state.bad}
-          total={countTotalFeedback(state)}
-          positivePercentage={countPositiveFeedbackPercentage(state)}
-        />
+      <Section title="Statistics">
+        {/* Використовуємо умовний рендеринг і перевіряємо, чи загальна кількість зiбраних вiдгукiв бiльша за нуль */}
+        {total > 0 ? (
+          // Якщо так, то рендеримо компонент <Statistics> і передаємо йому дані з стану застосунку і результати допомiжних методiв
+          <Statistics
+            good={state.good}
+            neutral={state.neutral}
+            bad={state.bad}
+            total={total}
+            positivePercentage={countPositiveFeedbackPercentage(state)}
+          />
+        ) : (
+          // Якщо нi, то рендеримо компонент <Notification> з повiдомленням "There is no feedback"
+          <Notification message="There is no feedback" />
+        )}
       </Section>
     </div>
   );
 }
 
+export default App;
